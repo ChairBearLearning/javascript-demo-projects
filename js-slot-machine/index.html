@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slot machine</title>
+
+    <style>
+
+    .raw-img {
+        position: fixed;
+        left: 0;
+        top: 0;
+        height: 100vh;
+        width: auto;
+    }
+
+    /*    gen the box they sit in */
+    html,
+    body {
+        height: 100%;
+    }
+
+    body {
+        background: linear-gradient(90deg, #23caaa, #23cbee);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    /* create the slots */
+    .slots {
+        /* times 3 as we've set currently to have 3 slots, amend to add more*/
+        /* .5 for more easly visible*/
+        width: calc(3.5 * 79px);
+        height: calc(3 * 79px);
+        /* border temporary so we can see the hit box as we build*/
+        /*border: 2px solid black;*/
+        /* needed to show all columns next to each other horizontal*/
+        display: flex;
+        justify-content: space-between;
+        /*padding added to make the area around the slots appear like a machine container*/
+        padding: calc(0.3 * 79px);
+        position: relative;
+        /*add shade to the top and bottom to give appearance of depth*/
+        background: linear-gradient(45deg, grey 0%, lightgrey 100%);
+        border-top: 1px solid rgba(255, 255, 255, 0.6);
+        border-right: 1px solid rgba(255, 255, 255, 0.6);
+        border-left: 1px solid rgba(0, 0, 0, 0.4);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+        box-shadow: -2px 2px 3px rgba(0, 0, 0, 0.3);
+        border-radius: 3px;
+    }
+
+    .slots::before,
+    .slots::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        width: 10px;
+        height: 2px;
+        background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    .slots::before {
+        left: 0;
+        transform: translate(-200%, -50%);
+    }
+
+    .slots::after {
+        right: 0;
+        transform: translate(200%, -50%);
+    }
+
+    @keyframes win1 {
+        0% {
+            background: linear-gradient(45deg, orange 0%, yellow 100%);
+            box-shadow: 0 0 80px orange;
+        }
+        100% {
+            background: linear-gradient(45deg, grey 0%, lightgrey 100%);
+            box-shadow: -2px 2px 3px rgba(0, 0, 0, 0.3);
+        }
+    }
+
+    @keyframes win2 {
+        0% {
+            background: linear-gradient(45deg, lightgreen 0%, lightblue 100%);
+            box-shadow: 0 0 80px orange;
+        }
+        100% {
+            background: linear-gradient(45deg, grey 0%, lightgrey 100%);
+            box-shadow: -2px 2px 3px rgba(0, 0, 0, 0.3);
+        }
+    }
+
+    .slots.win1 {
+        animation: win1 200ms steps(2, end) infinite;
+    }
+
+    .slots.win2 {
+        animation: win2 200ms steps(2, end) infinite;
+    }
+
+    .slots .reel {
+        position: relative;
+        border: 1px solid rgba(0, 0, 0, 0.3);
+        border-radius: 3px;
+        width: 79px;
+        height: calc(3 * 79px);
+        /*    add the slot images*/
+        background-image: url('slotreel.webp');
+        /* for when we do the spin*/
+        background-repeat: repeat-y;
+        /* we will be animating background position Y */
+        background-position: 0 0;
+        /*    hide other reel not shown*/
+        overflow: hidden;
+    }
+
+    .slots .reel::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: linear-gradient(rgba(0, 0, 0, 0.4) 0%, transparent 30%, transparent 70%, rgba(0, 0, 0, 0.4) 100%);
+        box-shadow: inset 0 0 6px 2px rgba(0, 0, 0, 0.3);
+    }
+
+    </style>
+</head>
+<body>
+
+<div class="slots">
+    <div class="reel"></div>
+    <div class="reel"></div>
+    <div class="reel"></div>
+</div>
+
+<img class="raw-img" src="slotreel.webp" alt="Slot image sourced from codepen & youtube">
+<button onclick="rollSlots()">Roll Slots</button>
+<script>
+<!--   needed to cal how many pixels to move each time-->
+const icon_width = 79, icon_height = 79, num_icons = 9;
+//need an array to hold the indexes - this will be the win line
+const indexes = [0, 0, 0];
+//map the images to indexes - starts at babana then goes up, as we will animate the slot rolling downwards
+const iconMap = ['banana', 'seven', 'cherry', 'plum', 'orange', 'bell', 'bar', 'lemon', 'melon'];
+// max speed for animating one icon
+const time_per_icon = 100;
+
+const roll = (reel, offset = 0) => {
+    // roll a minimal of 2 times + random time
+    // const roller = 2 * num_icons + Math.round(Math.random() * num_icons);
+    // we always want the 2nd wheel to slow after the first
+    const roller = (offset + 2) * num_icons + Math.round(Math.random() * num_icons);
+
+    // return a Promise to wait for all wheels to stop
+    return new Promise( (resolve, reject) => {
+        //    find the background position
+        const style = getComputedStyle(reel), backgroundPositionY = parseFloat(style['background-position-y']);
+        const targetBackgroundPositionY = backgroundPositionY * roller * icon_height;
+
+    //    normalise position for reset
+        const normalTarBackgroundPositionY = targetBackgroundPositionY % (num_icons * icon_height);
+
+        // delay the animation here, instead of animation property as ani prop causes stutter
+        setTimeout(() => {
+            reel.style.transition = `background-position-y ${ (8 + 1 * roller ) * time_per_icon}ms cubic-bezier(.41,-0.01, .63,1.09)`;
+            reel.style.backgroundPositionY = `${normalTarBackgroundPositionY + roller * icon_height}px`;
+        }, offset * 150);
+
+        // delay reset AFTER spin finishes
+        const spinDuration = (8 + 1 * roller) * time_per_icon + offset * 150;
+        const pauseBeforeReset = 800; // how long to pause before resetting (in ms)
+
+        setTimeout(() => {
+            // Pause here to show result before resetting
+
+            // after the animate
+        setTimeout(() => {
+            // reset the position - cannot get higher without limit
+            reel.style.transition = 'none';
+            reel.style.backgroundPositionY = `${normalTarBackgroundPositionY}px`;
+
+            // end promise
+            resolve(roller % num_icons);
+        }, pauseBeforeReset);
+        }, spinDuration);
+    });
+
+};
+
+function rollSlots() {
+    let reelList = document.querySelectorAll('.slots > .reel');
+//    convert to array for future lines to use array func
+  // ei  [...reelList].map
+
+    Promise.all( [...reelList].map((reel, i) => roll(reel, i))).then((theRoll) => {
+       // add up index
+       theRoll.forEach((r, i) => indexes[i] = (indexes[i] + r) % num_icons);
+
+       // winner conditions
+
+        if(indexes[0] == indexes[1] || indexes[1] == indexes[2]){
+            const winCondition = indexes[0] == indexes[2] ? 'win2' : 'win1';
+
+            document.querySelector('.slots').classList.add(winCondition);
+            setTimeout( () =>
+                document.querySelector('.slots').classList.remove(winCondition), 2000);
+        }
+            // setTimeout(rollSlots, 3000);
+    });
+}
+
+
+</script>
+</body>
+</html>
