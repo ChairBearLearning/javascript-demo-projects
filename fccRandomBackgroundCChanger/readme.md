@@ -22,3 +22,14 @@ Uncaught ReferenceError: math is not defined
 A ReferenceError is thrown when a non-existent variable is referenced. In this case, it looks like CamperBot is trying to use math but JavaScript doesn't have a math object.
 
 Fix CamperBot's error in the math.random() line and open up the console again.
+
+Step 3
+Now that the ReferenceError is resolved, the console is displaying the correct results for a random number between 0 and 9. But CamperBot was not expecting to see decimal numbers like these:
+
+Example Code
+0.015882899879771095
+2.114596286197641
+6.040964780197666
+Update the console statement to print a whole number between 0 and 9.
+
+Remember that you worked with a method in the Role Playing Game that rounds a number down to the nearest whole number.
