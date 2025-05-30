@@ -9,7 +9,7 @@ to capture both methods, we set an handler on the form itself with the submit ev
 const form = document.getElementById('registrar');
 // references the inout element inside the form, so we can read the user input
 const input = form.querySelector('input');
-//move ul declarion outside of form function so that sumbit handler and change handler have access to it 
+//move ul declarion outside of form function so that sumbit handler and change handler have access to it
 const ul = document.getElementById('invitedList');
 
 //the sumbit event to log user inputs -- arrow function used to define anonymous function
@@ -36,19 +36,19 @@ form.addEventListener('submit', (e) => {
     //append checkbox to list element
     li.appendChild(label);
 
-    // ****** Edit a name code START ****** 
+    // ****** Edit a name code START ******
     const editButton = document.createElement('button');
     editButton.textContent = 'Edit';
     //want to append our button to the list item
     li.appendChild(editButton);
-    // ****** Edit a name code  END ****** 
+    // ****** Edit a name code  END ******
 
-    // ****** Remove a name code START ****** 
+    // ****** Remove a name code START ******
         const removeButton = document.createElement('button');
         removeButton.textContent = 'Remove';
         //want to append our button to the list item
         li.appendChild(removeButton);
-    // ****** Remove a name code  END ****** 
+    // ****** Remove a name code  END ******
 
     //append list element to the unordered list parent
     ul.appendChild(li);
@@ -65,7 +65,7 @@ ul.addEventListener('change', (e) => {
     the list item is the grandparent of the checkbox, to traverse to the grandparent node we can call the parent node twice
     */
    const listItem = checkbox.parentNode.parentNode;
-   
+
    //set the list class name to respondeed if checked is true, else remove it if false
    if (checked){
     listItem.className = 'responded';
@@ -89,7 +89,7 @@ ul.addEventListener('click', (e) => {
     // defrenetiation will be coded later by reading the buttons text content (or set class names on the buttons and read those)
   if (e.target.tagName === 'BUTTON') {
     //get a reference to the li item from the button
-    
+
     const li = e.target.parentNode;
     //traverse to list items parent node
     const ul = li.parentNode;
@@ -97,27 +97,27 @@ ul.addEventListener('click', (e) => {
     //wrap in new if statement to check the text content of the button to ensure that only the remove button removes list items
     if (e.target.textContent === 'Remove') {
         ul.removeChild(li);
-    }  
+    }
     //add edit button logic
     else if (e.target.textContent === 'Edit') {
       /* to manipultate DOM into an editing state we must turn the text into an input area to be able to edit the text
       for this to work, the text will also need to be removed from the list item to replace it with the new.
-      
+
       the text is not a html element, instead its a text element, meaning it's accessed an manipulated differently from that of a html element
       to manipulate it easier we must convert it into a html span element. we do this be modifiying the create li function
       */
 
-      //select the span to be able to edit 
+      //select the span to be able to edit
       const span = li.firstElementChild;
       //create input element we want to replace the span with
       const input = document.createElement('input');
       //configure input to be a text input
       input.type = 'text';
-      
+
       //add the current text in the span element (name content) to the input element to allow users to edit it
       input.value = span.textContent;
 
-      //use the span to place the new input element into the DOM using insert before -- we want to place the new input element before the span 
+      //use the span to place the new input element into the DOM using insert before -- we want to place the new input element before the span
       li.insertBefore(input,span);
       //finally call remove child on span to remove it
       li.removeChild(span);
@@ -161,7 +161,7 @@ mainDiv.insertBefore(div, ul);
 //event is change as checkboxes trigger a change event not click like with buttons
 filterCheckbox.addEventListener('change', (e) => {
   const isChecked = e.target.checked;
-  //create reference to list items to loop through them 
+  //create reference to list items to loop through them
   // we traverse to them from the ul  by using the children property
   //children provides a reference to a collection of all an elements children
   const listL = ul.children;
@@ -179,7 +179,7 @@ filterCheckbox.addEventListener('change', (e) => {
         li.style.display = 'none';
       }
     }
-  } 
+  }
   // show all guests whether or not they've responded
   else {
     for (let i = 0; i < listL.length; i++) {
@@ -226,3 +226,68 @@ filterCheckboxUn.addEventListener('change', (e) => {
     }
   }
 })
+
+/*
+Gets the ul li items, loops through them to get the name and response of each item
+before pushing the result to the new data array
+return the data array once the loop finishes
+to be used by the csv or txt methods then for formatting into the downloadable file
+ */
+function getInviteeData() {
+    const data = [];
+    const listItems = ul.children;
+    for (let i = 0; i < listItems.length; i++) {
+        const li = listItems[i];
+        const name = li.querySelector('span')?.textContent || '';
+        const responded = li.classList.contains('responded') ? 'Yes' : 'No';
+        data.push({ name, responded });
+    }
+    return data;
+}
+
+/*
+will export something like:
+Name,Responded
+Alice,Yes
+Bob,No
+ */
+function downloadCSV() {
+    const invitees = getInviteeData();
+    let csvContent = 'Name,Responded\n';
+    invitees.forEach(invitee => {
+        csvContent += `${invitee.name},${invitee.responded}\n`;
+    });
+
+    const blob = new Blob([csvContent], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'invitees.csv';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+}
+
+/*
+will export something akin to:
+Invitee List
+
+Name: Alice, Responded: Yes
+Name: Bob, Responded: No
+ */
+function downloadText() {
+    const invitees = getInviteeData();
+    let textContent = 'Invitee List\n\n';
+    invitees.forEach(invitee => {
+        textContent += `Name: ${invitee.name}, Responded: ${invitee.responded}\n`;
+    });
+
+    const blob = new Blob([textContent], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'invitees.txt';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+}

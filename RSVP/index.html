@@ -6,7 +6,7 @@
   <link href="https://fonts.googleapis.com/css?family=Courgette" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet">
   <link href="css/style.css" rel="stylesheet">
- 
+
 </head>
 <body>
   <div class="wrapper">
@@ -16,12 +16,16 @@
       <form id="registrar">
         <input type="text" name="name" placeholder="Invite Someone">
         <button type="submit" name="submit" value="submit">Submit</button>
+        <button type="button" onclick="downloadCSV()">Download CSV</button>
+        <button type="button" onclick="downloadText()">Download Text File</button>
       </form>
+</br>
+
     </header>
-		
-    <div class="main">	
+
+    <div class="main">
       <h2>Invitees</h2>
-      <ul id="invitedList"></ul>	
+      <ul id="invitedList"></ul>
     </div>
   </div>
   <script src="app.js"></script>
