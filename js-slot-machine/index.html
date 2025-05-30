@@ -173,23 +173,14 @@
         const reelList = [...document.querySelectorAll('.slots > .reel')];
 
         Promise.all(reelList.map((reel, i) => roll(reel, i))).then((results) => {
-            // results.forEach((res, i) => {
-            //     // add icon_height offset to center line calculation:
-            //     const centerPos = (res.finalY + icon_height) % (num_icons * icon_height);
-            //     // indexes[i] = Math.floor(centerPos / icon_height);
-            //    // indexes[i] = Math.floor((res.normalizedPositionY + icon_height) / icon_height) % num_icons;
-            //
-            // });
 
             results.forEach((res, i) => {
                 // use normalized position only — finalY might drift over time
                 const normalizedY = res.normalizedPositionY;
                 // shift down by one icon to get the center symbol
-                const centerIndex = Math.floor((normalizedY + icon_height) / icon_height) % num_icons;
+                const centerIndex = Math.floor(normalizedY / icon_height) % num_icons;
                 indexes[i] = centerIndex;
             });
-
-
 
             console.log("Indexes:", indexes);
             console.log("Symbols:", indexes.map(i => iconMap[i]));
