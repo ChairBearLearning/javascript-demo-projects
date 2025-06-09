@@ -1,0 +1,17 @@
+.container{
+    background: lightblue;
+    border-radius: 15px;
+    align-content: center;
+    height: 250px;
+    text-align: center;
+}
+
+#check-btn {
+    background-color: #23cbab;
+    border-radius: 15px;
+    border: 0;
+}
+
+#result {
+    background-color: #23cbee;
+}
