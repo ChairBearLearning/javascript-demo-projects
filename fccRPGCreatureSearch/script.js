@@ -4,7 +4,8 @@ const creatures = [
 ];
 
 
-document.getElementById('search-button').addEventListener('click', () => {
+document.getElementById('search-button').addEventListener('click', (event) => {
+    event.preventDefault();
     const searchValue = document.getElementById('search-input').value.trim().toLowerCase();
 
     const found = creatures.find(creature =>
@@ -46,6 +47,7 @@ document.getElementById('search-button').addEventListener('click', () => {
     found.types.forEach(type => {
         const typeElement = document.createElement('div');
         typeElement.textContent = type.toUpperCase();
+        typeElement.classList += type.toLowerCase();
         typesEl.appendChild(typeElement);
     });
 });
