@@ -92,13 +92,19 @@ test.describe('Navigation menu @mobile @desktop', () => {
 
     test('Menu clicking directs to page section @desktop', async ({ page, isMobile }) => {
         test.skip(isMobile,'This test is for desktop only');
+        async function isInViewport(locator) {
+            const box = await locator.boundingBox();
+            const viewport = await page.viewportSize();
+            return box && viewport && box.y >= 0 && box.y < viewport.height;
+        }
+
         await page.getByRole('link', { name: 'Companies Worked With' }).click();
         await expect(page).toHaveURL('https://chairbearlearning.github.io/#companies');
-        await expect(page.getByRole('heading', { name: 'Companies Worked With' })).toBeFocused();
+        expect(await isInViewport(page.getByRole('heading', { name: 'Companies Worked With' }))).toBe(true);
 
         await page.getByRole('link', { name: 'Skills Breakdown' }).click();
         await expect(page).toHaveURL(' https://chairbearlearning.github.io/#skills-chart');
-        await expect(page.getByRole('heading', { name: 'Skills by Experience (Years)' })).toBeFocused();
+        expect(await isInViewport(page.getByRole('heading', { name: 'Skills by Experience (Years)' }))).toBe(true);
     });
 
     test('Menu clicking directs to page section @mobile', async ({ page, isMobile }) => {
@@ -107,6 +113,12 @@ test.describe('Navigation menu @mobile @desktop', () => {
         const desktopMenu = page.locator('#the-side-bar-menu');
         const hamburgerMenu = mobileHeader.locator('.basic-btn.teal.margins-r');
 
+        async function isInViewport(locator) {
+            const box = await locator.boundingBox();
+            const viewport = await page.viewportSize();
+            return box && viewport && box.y >= 0 && box.y < viewport.height;
+        }
+
         // click on hamburg to trigger menu open
         await hamburgerMenu.click();
         await expect(desktopMenu).toBeVisible();
@@ -114,7 +126,7 @@ test.describe('Navigation menu @mobile @desktop', () => {
         await desktopMenu.getByRole('link', { name: 'Code Experience' }).click();
         // should be directed to page section and menu should have closed
         await expect(page).toHaveURL('https://chairbearlearning.github.io/#skills');
-        await expect(page.getByRole('heading', { name: 'Coding Experience' })).toBeFocused();
+        expect(await isInViewport(page.getByRole('heading', { name: 'Coding Experience' }))).toBe(true);
         await expect(desktopMenu).not.toBeVisible();
 
         // click on hamburg to trigger menu open
@@ -124,8 +136,13 @@ test.describe('Navigation menu @mobile @desktop', () => {
         await desktopMenu.getByRole('link', { name: 'About' }).click();
         // should be directed to page section and menu should have closed
         await expect(page).toHaveURL('https://chairbearlearning.github.io/#hello');
-        await expect(page.getByRole('heading', { name: 'About' })).toBeFocused();
+        expect(await isInViewport(page.getByRole('heading', { name: 'About', exact: true }).locator('b'))).toBe(true);
+
+        // toBeFocused()matcher is checking whether the element is the current document activeElement, which usually only applies after keyboard interactions like Tab or programmatic .focus(). Just clicking a link that jumps to an anchor doesn't focus the heading — it just scrolls it into view
+       // await expect(page.getByRole('heading', { name: 'About' })).toBeFocused();
         await expect(desktopMenu).not.toBeVisible();
     });
+
+
 });
 
