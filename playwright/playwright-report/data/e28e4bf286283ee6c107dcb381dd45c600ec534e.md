@@ -1,0 +1,96 @@
+# Page snapshot
+
+```yaml
+- navigation:
+  - heading "ChairBear" [level=3]
+  - link "Home":
+    - /url: "#"
+  - link "Project Demo":
+    - /url: "#prod-demo"
+  - link "About":
+    - /url: "#hello"
+  - link "Companies Worked With":
+    - /url: "#companies"
+  - link "Code Experience":
+    - /url: "#skills"
+  - link "Skills Breakdown":
+    - /url: "#skills-chart"
+- heading "Software & Test Engineer and SEO Technician" [level=1]
+- heading "About" [level=3]
+- separator
+- paragraph: Welcome to my GitHub IO page. I'm a self-driven software and test engineer with a strong passion for learning and problem-solving, recently diving deep into Python and Selenium Webdriver to expand my automation and development skillset. With hands-on experience contributing to projects for major companies like Wayfair and NEXT, I bring both technical expertise and an eagerness to grow. I'm now looking for my next venture—ideally with a forward-thinking team where I can continue to evolve and make meaningful impact. My core development experience lies in PHP, with an emphasis on the Symfony and Laravel frameworks. I've built and maintained robust backend systems and have consistently contributed to high-impact projects. In addition to my full stack development experience, I have a deep interest in automation and have developed significant proficiency with Cypress. I was instrumental in building out my current companies Cypress test suite — personally contributing 55% of the total coverage — dramatically improving testing reliability and deployment confidence across teams.
+- heading "Key takeaways about me" [level=4]:
+  - strong: Key takeaways about me
+- paragraph
+- list:
+  - listitem: Experienced in testing dynamic, JavaScript-driven interfaces and async behavior using Cypress—including AJAX calls, modals, and conditional rendering
+  - listitem: 4+ years experience developing and maintaining backend systems in PHP, with a focus on clean code, testability, and performance
+  - listitem: Skilled in analyzing backend performance and optimizing SQL queries to improve data throughput and reduce latency
+  - listitem: Implemented data pipelines and dashboards using Power BI and Excel for internal reporting and business intelligence
+  - listitem: Solid foundation in software testing, with 4+ years in QA practices including PHPUnit, Cypress, Jenkins pipelines, and Jira for defect tracking
+  - listitem: Skilled in accessibility and usability validation using tools like Axe DevTools and IBM Equal Access
+- paragraph
+- heading "Companies Worked With" [level=3]
+- separator
+- paragraph: I have worked with some big named brand companies across the years providing various services. And with this, my roles often involved working closely with company executives and stakeholders to translate business needs into actionable technical outcomes. I’ve produced product specifications, generated analytics reports, and helped inform decision-making with clear, data-driven insights. Beyond technical contributions, I’ve created marketing copy and designed images for websites, supporting e-commerce strategies with content tailored to drive engagement and sales. This blend of technical and business-facing experience makes me confident in communicating across all levels of an organization and delivering value beyond just code. Most recently, I have also worked with government bodies, assisting in the retention and distribution of information through my contributions to a customisable content management system product.
+- img "Joules"
+- heading "Joules" [level=1]
+- paragraph: Fashion
+- paragraph: Performed data analytics on Google Analytics to identify high performing ad campaigns and pages. And provided reports in Power Bi
+- img "Durex"
+- heading "Durex" [level=1]
+- paragraph: Adult Health
+- paragraph: Provided various Technical SEO support including market research and link building
+- img "Wayfair"
+- heading "Wayfair" [level=1]
+- paragraph: Home Decor
+- paragraph: Completed product specification sheets & product asset management. Increasing product tag coverage (increasing Search Engine Rank)
+- img "Signet (H.Samuel and Ernest Jones)"
+- heading "Signet (H.Samuel and Ernest Jones)" [level=1]
+- paragraph: Jewelers
+- paragraph: Marketing copy creation
+- heading "Coding Experience" [level=3]
+- paragraph: A more in depth breakdown of my previous job roles. Click the accordions to open.
+- separator
+- button "Test Engineering"
+- button "Software Engineering"
+- button "SEO Technician"
+- button "Full Stack Developer"
+- heading "Project Demos" [level=3]
+- separator
+- paragraph: A selection of examples of various code and training materials. The example button will lead to either one set example or a folder where multiple can be found. For examples that display only one, please do enquire for the others, and they can be linked to separately.
+- text: 1 / 6
+- list:
+  - listitem: PHP
+  - listitem: Symfony Word Checker
+  - listitem:
+    - link "See Example":
+      - /url: https://github.com/ChairBearLearning/SymfonyConsoleApp
+- text: ❮ ❯
+- heading "What about test engineering?" [level=3]
+- paragraph:
+  - text: "We can't leave an example out for that can we! See a cypress example here:"
+  - link "Cypress":
+    - /url: https://github.com/ChairBearLearning/javascript-demo-projects/tree/main/cypress
+- paragraph:
+  - text: "Playwright? Right here:"
+  - link "Playwright":
+    - /url: https://github.com/ChairBearLearning/javascript-demo-projects/tree/main/playwright
+- heading "Skills by Experience (Years)" [level=3]
+- separator
+- heading "6+ Years" [level=3]
+- paragraph: Microsoft Office, Adobe Photoshop, Microsoft Word, Microsoft Excel, Git
+- heading "5 Years" [level=3]
+- paragraph: Web Development, HTML, Business Administration, Visual Studio
+- heading "4 Years" [level=3]
+- paragraph: PHP, Microsoft PowerPoint, JavaScript, PHPUnit Tests, Software Quality Assurance
+- heading "3 Years" [level=3]
+- paragraph: Google Analytics, SQL, SEO, Cypress Automation, SCSS, CSS, Docker, Axe DevTools, Microsoft SQL Management Studio, Data Analysis, Jenkins, Jira, Software Testing, Google Suite
+- heading "2 Years" [level=3]
+- paragraph: WordPress, Animation, AJAX, T-SQL
+- heading "1 Year or Less" [level=3]
+- paragraph: Power BI, Adobe Analytics, Tailwind, Selenium IDE and Webdriver, Playwright, TinyMCE, Email Marketing, IBM Equal Access, Shopify, C#, Colab, Python
+- heading "What am I currently up to?" [level=4]
+- paragraph: I am currently taking the initiative to learn python, and selenium webdriver. Why? Because I believe experience with Playwright and Selenium is integral for end-to-end testing across multiple browsers, and learning it will build toward full SDET capability.
+- paragraph: Built by tired bears
+```
