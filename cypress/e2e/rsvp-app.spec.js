@@ -23,6 +23,41 @@ describe('RSVP Application @javascript', () => {
             });
     });
 
+    it('Check contains expected help text', () => {
+        cy.get('div#rsvp').within(() => {
+            cy.get('span').should('contain', 'What is this project?')
+                .and('contain','How to use?');
+
+            cy.get('p').should('contain', 'Features:')
+                .and('contain', 'Type an invitee name in the input and submit for it to be showed in the invitee list. ')
+                .and('contain', 'Use the provided buttons to edit, delete and download the invitees.')
+                .and('contain', 'Use the \'Responded\' checkboxes to filter the invitee list.');
+        });
+    });
+
+    it('Form has expected fields', () => {
+        cy.get('div.wrapper-rsvp').within(() => {
+            cy.get('input[name="name"]').should('exist');
+            cy.get('button[name="submit"]').should('exist');
+            cy.get('button[type="button"]').should('contain', 'Download CSV')
+                .and('contain', 'Download Text File');
+        });
+    });
+
+    it('Can submit invitee and see it in list', () => {
+        const name = 'Jason';
+        cy.get('div.wrapper-rsvp').within(() => {
+            cy.get('input[name="name"]').type(name);
+            cy.get('button[name="submit"]').click();
+
+            cy.get('.main').within(() => {
+                cy.get('ul#invitedList').find('li').should('contain', name)
+                    .and('contain', 'Edit')
+                    .and('contain', 'Remove');
+            });
+        });
+    });
+
     it('Has no invalid html @html-validation', () => {
         cy.validateHtml();
     });

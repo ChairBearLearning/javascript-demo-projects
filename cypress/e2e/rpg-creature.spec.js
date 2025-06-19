@@ -71,6 +71,7 @@ describe('RPG Creature @javascript @fcc', () => {
         });
     });
 
+    // also testing input is not case sensitive
     it('Creature types are coloured based on type', () => {
         RPGCreaturePage.getCreatureInput().type('Aquoroc');
         RPGCreaturePage.getSubmitBtn().click();
@@ -103,6 +104,17 @@ describe('RPG Creature @javascript @fcc', () => {
         RPGCreaturePage.getCreatureInput().type('chairbear');
         RPGCreaturePage.getSubmitBtn().click().then(() => {
             expect(stub.getCall(0)).to.be.calledWith('Creature not found');
+        });
+    });
+
+    it('Check contains expected help text', () => {
+        cy.get('div#fcc-rpg-creature').within(() => {
+        cy.get('span').should('contain', 'What is this project?')
+            .and('contain', 'How to use?');
+
+        cy.get('p').should('contain', 'This project comes from the Free Code Camp, as one of the projects needed to gain a Javascript certification with them.')
+            .and('contain', 'See the project details on the FCC site - ')
+            .and('contain', 'Select from the following, and enter to see the creatures details: ');
         });
     });
 
