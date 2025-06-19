@@ -4,11 +4,11 @@ import Page from './Page';
 class RPGCreaturePage extends Page {
 
     static getTopContainer(){
-        return cy.get('div.top-container');
+        return cy.get('div.top-rpg-container');
     }
 
     static getBtmContainer(){
-        return cy.get('div.bottom-container');
+        return cy.get('div.bottom-rpg-container');
     }
 
     static getCreatureInput(){

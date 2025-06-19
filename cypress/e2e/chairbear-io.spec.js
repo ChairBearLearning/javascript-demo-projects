@@ -3,6 +3,8 @@ import { ChairBearIoPage } from '../elements/pages/index';
 
 describe('Chairbear Site @github', () => {
     const jobTitles =  ['Test Engineering', 'Software Engineering', 'SEO Technician', 'Full Stack Developer'];
+    const navTitles = ['Home', 'Project Demo', 'About', 'Companies Worked With', 'Code Experience', 'Skills Breakdown'];
+    const navLinks = ['#', '#prod-demo', '#hello', '#companies', '#skills', '#skills-chart'];
 
     beforeEach(() => {
         ChairBearIoPage.visit();
@@ -14,6 +16,17 @@ describe('Chairbear Site @github', () => {
             .and('contain', 'Coding Experience')
             .and('contain', 'Project Demos')
             .and('contain', 'Skills by Experience (Years)');
+    });
+
+    it('Navigation panel is as expected', () => {
+        cy.get('nav#the-side-bar-menu')
+            .find('.the-bar-block > a')
+            .should('have.length', navTitles.length)
+            .each(($el, index) => {
+                cy.wrap($el)
+                    .should('contain', navTitles[index])
+                    .and('have.attr', 'href', navLinks[index]);
+            });
     });
 
     it('Project Demos section has expected format', () => {
@@ -81,4 +94,16 @@ describe('Chairbear Site @github', () => {
                 .and('have.css', 'display', 'block');
         });
     });
+
+    it('Should have links to test engineering examples', () => {
+        ChairBearIoPage.getDemoSection().within(() => {
+            cy.get('a').contains('Cypress').should('exist').should('have.attr', 'href').and('include', 'javascript-demo-projects/tree/main/cypress');
+            cy.get('a').contains('Playwright').should('exist').should('have.attr', 'href').and('include', 'javascript-demo-projects/tree/main/playwright');
+        });
+    });
+
+    it('Has no invalid html @html-validation', () => {
+        cy.validateHtml();
+    });
+
 });
