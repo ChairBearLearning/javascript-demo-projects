@@ -37,21 +37,21 @@ describe('RSVP Application @javascript', () => {
     });
 
     it('Form has expected fields', () => {
-        cy.get('div.wrapper-rsvp').within(() => {
-            cy.get('input[name="name"]').should('exist');
-            cy.get('button[name="submit"]').should('exist');
+        RSVPPage.getRSVPContainer().within(() => {
+            RSVPPage.getInviteeInput().should('exist');
+            RSVPPage.getSubmitButton().should('exist');
             cy.get('button[type="button"]').should('contain', 'Download CSV')
                 .and('contain', 'Download Text File');
         });
     });
 
     it('Can submit invitee and see it in list', () => {
-        cy.get('div.wrapper-rsvp').within(() => {
-            cy.get('input[name="name"]').type(name);
-            cy.get('button[name="submit"]').click();
+        RSVPPage.getRSVPContainer().within(() => {
+            RSVPPage.getInviteeInput().type(name);
+            RSVPPage.getSubmitButton().click();
 
-            cy.get('.main').within(() => {
-                cy.get('ul#invitedList').find('li').should('contain', name)
+            RSVPPage.getListContainer().within(() => {
+                RSVPPage.getInviteeList().find('li').should('contain', name)
                     .and('contain', 'Edit')
                     .and('contain', 'Remove');
             });
@@ -60,13 +60,13 @@ describe('RSVP Application @javascript', () => {
 
     it('Can edit invitee', () => {
         RSVPPage.createInvitee(name);
-        cy.get('div.wrapper-rsvp').within(() => {
-            cy.get('.main').within(() => {
-                cy.get('ul#invitedList').find('li').contains(name).parentsUntil('ul#invitedList').find('button').contains('Edit').click();
+        RSVPPage.getRSVPContainer().within(() => {
+            RSVPPage.getListContainer().within(() => {
+                RSVPPage.getInviteeList().find('li').contains(name).parentsUntil('ul#invitedList').find('button').contains('Edit').click();
 
-                cy.get('ul#invitedList').find('input[type="text"]').type('Amended');
-                cy.get('ul#invitedList').find('button').contains('Save');
-                cy.get('ul#invitedList').find('input[type="text"]').invoke('val')
+                RSVPPage.getInviteeList().find('input[type="text"]').type('Amended');
+                RSVPPage.getInviteeList().find('button').contains('Save');
+                RSVPPage.getInviteeList().find('input[type="text"]').invoke('val')
                     .then((element) => {
                         expect(element).to.be.equal(`${name}Amended`);
                     });
@@ -76,11 +76,11 @@ describe('RSVP Application @javascript', () => {
 
     it('Can delete invitee', () => {
         RSVPPage.createInvitee(name);
-        cy.get('div.wrapper-rsvp').within(() => {
-            cy.get('.main').within(() => {
-                cy.get('ul#invitedList').find('li').should('contain', name);
-                cy.get('ul#invitedList').find('li').contains(name).parentsUntil('ul#invitedList').find('button').contains('Remove').click();
-                cy.get('ul#invitedList').find('li').should('not.exist');
+        RSVPPage.getRSVPContainer().within(() => {
+            RSVPPage.getListContainer().within(() => {
+                RSVPPage.getInviteeList().find('li').should('contain', name);
+                RSVPPage.getInviteeList().find('li').contains(name).parentsUntil('ul#invitedList').find('button').contains('Remove').click();
+                RSVPPage.getInviteeList().find('li').should('not.exist');
             });
         });
     });
@@ -89,27 +89,27 @@ describe('RSVP Application @javascript', () => {
         RSVPPage.createInvitee(name);
         RSVPPage.createInvitee(nameTwo);
 
-        cy.get('div.wrapper-rsvp').within(() => {
-            cy.get('.main').within(() => {
-                cy.get('ul#invitedList').find('li').contains(name).parentsUntil('ul#invitedList').within(() => {
-                    cy.get('input[type="checkbox"]').check();
+        RSVPPage.getRSVPContainer().within(() => {
+            RSVPPage.getListContainer().within(() => {
+                RSVPPage.getInviteeList().find('li').contains(name).parentsUntil('ul#invitedList').within(() => {
+                    RSVPPage.getCheckbox().check();
                 });
             });
 
-            cy.get('label').contains('Hide Unresponded').parentsUntil('.main').within(() => {
-                cy.get('input[type="checkbox"]').check();
+            RSVPPage.getConfirmationFilter('Hide Unresponded').within(() => {
+                RSVPPage.getCheckbox().check();
             });
 
-            cy.get('ul#invitedList').find('li').contains(nameTwo).parentsUntil('ul#invitedList').should('have.css', 'display', 'none');
-            cy.get('ul#invitedList').find('li.responded').should('exist')
+            RSVPPage.getInviteeList().find('li').contains(nameTwo).parentsUntil('ul#invitedList').should('have.css', 'display', 'none');
+            RSVPPage.getInviteeList().find('li.responded').should('exist')
                 .and('have.css', 'display', 'list-item')
                 .and('contain', name);
 
-            cy.get('label').contains('Hide Unresponded').parentsUntil('.main').within(() => {
-                cy.get('input[type="checkbox"]').uncheck();
+            RSVPPage.getConfirmationFilter('Hide Unresponded').within(() => {
+                RSVPPage.getCheckbox().uncheck();
             });
 
-            cy.get('ul#invitedList').find('li').contains(nameTwo).parentsUntil('ul#invitedList').should('have.css', 'display', 'list-item');
+            RSVPPage.getInviteeList().find('li').contains(nameTwo).parentsUntil('ul#invitedList').should('have.css', 'display', 'list-item');
         });
     });
 
@@ -117,28 +117,28 @@ describe('RSVP Application @javascript', () => {
         RSVPPage.createInvitee(name);
         RSVPPage.createInvitee(nameTwo);
 
-        cy.get('div.wrapper-rsvp').within(() => {
-            cy.get('.main').within(() => {
-                cy.get('ul#invitedList').find('li').contains(name).parentsUntil('ul#invitedList').within(() => {
-                    cy.get('input[type="checkbox"]').check();
+        RSVPPage.getRSVPContainer().within(() => {
+            RSVPPage.getListContainer().within(() => {
+                RSVPPage.getInviteeList().find('li').contains(name).parentsUntil('ul#invitedList').within(() => {
+                    RSVPPage.getCheckbox().check();
                 });
             });
 
-            cy.get('label').contains('Show Unresponded Only').parentsUntil('.main').within(() => {
-                cy.get('input[type="checkbox"]').check();
+            RSVPPage.getConfirmationFilter('Show Unresponded Only').within(() => {
+                RSVPPage.getCheckbox().check();
             });
 
-            cy.get('ul#invitedList').find('li').contains(name).parentsUntil('ul#invitedList').should('have.css', 'display', 'none')
+            RSVPPage.getInviteeList().find('li').contains(name).parentsUntil('ul#invitedList').should('have.css', 'display', 'none')
                 .and('have.class', 'responded');
-            cy.get('ul#invitedList').find('li').not('.responded').should('exist')
+            RSVPPage.getInviteeList().find('li').not('.responded').should('exist')
                 .and('have.css', 'display', 'list-item')
                 .and('contain', nameTwo);
 
-            cy.get('label').contains('Show Unresponded Only').parentsUntil('.main').within(() => {
-                cy.get('input[type="checkbox"]').uncheck();
+            RSVPPage.getConfirmationFilter('Show Unresponded Only').within(() => {
+                RSVPPage.getCheckbox().uncheck();
             });
 
-            cy.get('ul#invitedList').find('li').contains(name).parentsUntil('ul#invitedList').should('have.css', 'display', 'list-item');
+            RSVPPage.getInviteeList().find('li').contains(name).parentsUntil('ul#invitedList').should('have.css', 'display', 'list-item');
         });
     });
 
