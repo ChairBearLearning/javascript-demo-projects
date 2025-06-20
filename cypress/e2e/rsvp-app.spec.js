@@ -4,7 +4,8 @@ import { RSVPPage } from '../elements/pages/index';
 describe('RSVP Application @javascript', () => {
     const navTitles = ['Home', 'RSVP Application', 'RPG Creature Search'];
     const navLinks = ['https://chairbearlearning.github.io', '#rsvp', '#fcc-rpg-creature'];
-
+    const name = 'Jason';
+    const nameTwo = 'Marquee';
 
     beforeEach(() => {
         // update for your path localhost path
@@ -45,7 +46,6 @@ describe('RSVP Application @javascript', () => {
     });
 
     it('Can submit invitee and see it in list', () => {
-        const name = 'Jason';
         cy.get('div.wrapper-rsvp').within(() => {
             cy.get('input[name="name"]').type(name);
             cy.get('button[name="submit"]').click();
@@ -55,6 +55,90 @@ describe('RSVP Application @javascript', () => {
                     .and('contain', 'Edit')
                     .and('contain', 'Remove');
             });
+        });
+    });
+
+    it('Can edit invitee', () => {
+        RSVPPage.createInvitee(name);
+        cy.get('div.wrapper-rsvp').within(() => {
+            cy.get('.main').within(() => {
+                cy.get('ul#invitedList').find('li').contains(name).parentsUntil('ul#invitedList').find('button').contains('Edit').click();
+
+                cy.get('ul#invitedList').find('input[type="text"]').type('Amended');
+                cy.get('ul#invitedList').find('button').contains('Save');
+                cy.get('ul#invitedList').find('input[type="text"]').invoke('val')
+                    .then((element) => {
+                        expect(element).to.be.equal(`${name}Amended`);
+                    });
+            });
+        });
+    });
+
+    it('Can delete invitee', () => {
+        RSVPPage.createInvitee(name);
+        cy.get('div.wrapper-rsvp').within(() => {
+            cy.get('.main').within(() => {
+                cy.get('ul#invitedList').find('li').should('contain', name);
+                cy.get('ul#invitedList').find('li').contains(name).parentsUntil('ul#invitedList').find('button').contains('Remove').click();
+                cy.get('ul#invitedList').find('li').should('not.exist');
+            });
+        });
+    });
+
+    it('Can confirm invitees and filter for confirmed', () => {
+        RSVPPage.createInvitee(name);
+        RSVPPage.createInvitee(nameTwo);
+
+        cy.get('div.wrapper-rsvp').within(() => {
+            cy.get('.main').within(() => {
+                cy.get('ul#invitedList').find('li').contains(name).parentsUntil('ul#invitedList').within(() => {
+                    cy.get('input[type="checkbox"]').check();
+                });
+            });
+
+            cy.get('label').contains('Hide Unresponded').parentsUntil('.main').within(() => {
+                cy.get('input[type="checkbox"]').check();
+            });
+
+            cy.get('ul#invitedList').find('li').contains(nameTwo).parentsUntil('ul#invitedList').should('have.css', 'display', 'none');
+            cy.get('ul#invitedList').find('li.responded').should('exist')
+                .and('have.css', 'display', 'list-item')
+                .and('contain', name);
+
+            cy.get('label').contains('Hide Unresponded').parentsUntil('.main').within(() => {
+                cy.get('input[type="checkbox"]').uncheck();
+            });
+
+            cy.get('ul#invitedList').find('li').contains(nameTwo).parentsUntil('ul#invitedList').should('have.css', 'display', 'list-item');
+        });
+    });
+
+    it('Can confirm invitees and filter for unconfirmed', () => {
+        RSVPPage.createInvitee(name);
+        RSVPPage.createInvitee(nameTwo);
+
+        cy.get('div.wrapper-rsvp').within(() => {
+            cy.get('.main').within(() => {
+                cy.get('ul#invitedList').find('li').contains(name).parentsUntil('ul#invitedList').within(() => {
+                    cy.get('input[type="checkbox"]').check();
+                });
+            });
+
+            cy.get('label').contains('Show Unresponded Only').parentsUntil('.main').within(() => {
+                cy.get('input[type="checkbox"]').check();
+            });
+
+            cy.get('ul#invitedList').find('li').contains(name).parentsUntil('ul#invitedList').should('have.css', 'display', 'none')
+                .and('have.class', 'responded');
+            cy.get('ul#invitedList').find('li').not('.responded').should('exist')
+                .and('have.css', 'display', 'list-item')
+                .and('contain', nameTwo);
+
+            cy.get('label').contains('Show Unresponded Only').parentsUntil('.main').within(() => {
+                cy.get('input[type="checkbox"]').uncheck();
+            });
+
+            cy.get('ul#invitedList').find('li').contains(name).parentsUntil('ul#invitedList').should('have.css', 'display', 'list-item');
         });
     });
 
