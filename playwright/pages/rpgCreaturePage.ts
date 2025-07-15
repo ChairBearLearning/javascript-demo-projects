@@ -1,7 +1,7 @@
 import { expect, Locator, Page } from '@playwright/test';
+import { BasePage } from './BasePage';
 
-export class RpgCreaturePage {
-    readonly page: Page;
+export class RpgCreaturePage extends BasePage {
     readonly section: Locator;
     readonly searchBox: Locator;
     readonly searchButton: Locator;
@@ -12,7 +12,7 @@ export class RpgCreaturePage {
     readonly typesSection: Locator;
 
     constructor(page: Page) {
-        this.page = page;
+        super(page); // Pass to BasePage
         this.section = page.locator('#fcc-rpg-creature');
         this.searchBox = page.getByRole('textbox', { name: /Search for Creature Name or/i });
         this.searchButton = page.getByRole('button', { name: 'Search' });
@@ -21,10 +21,6 @@ export class RpgCreaturePage {
         this.weightField = page.locator('#weight');
         this.heightField = page.locator('#height');
         this.typesSection = page.locator('#types');
-    }
-
-    async goto() {
-        await this.page.goto('https://chairbearlearning.github.io/projects/live-demos');
     }
 
     async verifyStaticContent() {
